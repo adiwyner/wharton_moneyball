@@ -4,7 +4,7 @@ title: "Wharton Moneyball Academy"
 
 ## Overview
 
-Welcome to the webpage for the 2019 Wharton Moneyball Academy / Training Camp course on data analysis in R.
+Welcome to the webpage for the 2020 Wharton Moneyball Academy / Training Camp course on data analysis in R.
 In this course, you will learn the tools necessary to apply the concepts you learn in Prof. Wyner's class while analyzing real sports datasets using the R programming language.
 Please bookmark this site and check back regularly before the program starts for updates.
 Below, you will find important information about setting up your system and installing the necessary software, as well as a brief schedule for the course.
