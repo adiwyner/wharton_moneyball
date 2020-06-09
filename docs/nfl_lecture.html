@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -27,9 +27,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -39,14 +39,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -55,9 +57,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -111,7 +113,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -168,7 +170,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -317,6 +318,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -329,27 +331,10 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 <style type="text/css">
 .code-folding-btn { margin-bottom: 4px; }
 </style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("show" === "show");
-});
-</script>
 
 
 
@@ -372,7 +357,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">WMA19</a>
+      <a class="navbar-brand" href="index.html">WMA2020</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -516,234 +501,237 @@ $(document).ready(function () {
 <h2>Getting the data</h2>
 <p>In this example analysis, we’re going to examine Super Bowl LII to gain insight into how the Philadelphia Eagles beat the New England Patriots (last year’s Super Bowl was pretty boring…)</p>
 <p>The first step is to load the data. Although we can use the <a href="https://github.com/maksimhorowitz/nflscrapR"><code>nflscrapR</code> package</a> to do this, we’re going to save time and access the repository of files that are already available to load and analyze from <a href="https://github.com/ryurko/nflscrapR-data">here</a>. We’re going to read in the entire set of play-by-play data from the post-season for the 2017-2018 NFL season.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>post_pbp_<span class="dv">2017</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">Parsed with column specification<span class="op">:</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">cols</span>(</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="dt">.default =</span> <span class="kw">col_double</span>(),</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="dt">home_team =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="dt">away_team =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">  <span class="dt">posteam =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="dt">posteam_type =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="dt">defteam =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="dt">side_of_field =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">  <span class="dt">game_date =</span> <span class="kw">col_date</span>(<span class="dt">format =</span> <span class="st">&quot;&quot;</span>),</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">  <span class="dt">game_half =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="dt">time =</span> <span class="kw">col_time</span>(<span class="dt">format =</span> <span class="st">&quot;&quot;</span>),</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">  <span class="dt">yrdln =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">  <span class="dt">desc =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">  <span class="dt">play_type =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">  <span class="dt">pass_length =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">  <span class="dt">pass_location =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">  <span class="dt">run_location =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20">  <span class="dt">run_gap =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-21" data-line-number="21">  <span class="dt">field_goal_result =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22">  <span class="dt">extra_point_result =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-23" data-line-number="23">  <span class="dt">two_point_conv_result =</span> <span class="kw">col_character</span>(),</a>
-<a class="sourceLine" id="cb1-24" data-line-number="24">  <span class="dt">timeout_team =</span> <span class="kw">col_character</span>()</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25">  <span class="co"># ... with 88 more columns</span></a>
-<a class="sourceLine" id="cb1-26" data-line-number="26">)</a>
-<a class="sourceLine" id="cb1-27" data-line-number="27">See <span class="kw">spec</span>(...) <span class="cf">for</span> full column specifications.</a>
-<a class="sourceLine" id="cb1-28" data-line-number="28">Warning<span class="op">:</span><span class="st"> </span><span class="dv">6</span> parsing failures.</a>
-<a class="sourceLine" id="cb1-29" data-line-number="29"> row                                col           expected     actual                                                                                                             file</a>
-<a class="sourceLine" id="cb1-30" data-line-number="30"><span class="dv">1226</span> lateral_rusher_player_id           <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> <span class="dv">00-0030496</span> <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></a>
-<a class="sourceLine" id="cb1-31" data-line-number="31"><span class="dv">1226</span> lateral_rusher_player_name         <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> L.Bell     <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></a>
-<a class="sourceLine" id="cb1-32" data-line-number="32"><span class="dv">1862</span> lateral_interception_player_id     <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> <span class="dv">00-0027762</span> <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></a>
-<a class="sourceLine" id="cb1-33" data-line-number="33"><span class="dv">1862</span> lateral_interception_player_name   <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> R.Jones    <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></a>
-<a class="sourceLine" id="cb1-34" data-line-number="34"><span class="dv">2109</span> lateral_kickoff_returner_player_id <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> <span class="dv">00-0030288</span> <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></a>
-<a class="sourceLine" id="cb1-35" data-line-number="35">.... .................................. .................. .......... ................................................................................................................</a>
-<a class="sourceLine" id="cb1-36" data-line-number="36">See <span class="kw">problems</span>(...) <span class="cf">for</span> more details.</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;</span><span class="st"> </span>post_pbp_<span class="dv">2017</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>Parsed with column specification<span class="op">:</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">cols</span>(</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">.default =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="dt">home_team =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="dt">away_team =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="dt">posteam =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-8"><a href="#cb1-8"></a>  <span class="dt">posteam_type =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="dt">defteam =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  <span class="dt">side_of_field =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-11"><a href="#cb1-11"></a>  <span class="dt">game_date =</span> <span class="kw">col_date</span>(<span class="dt">format =</span> <span class="st">&quot;&quot;</span>),</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="dt">game_half =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  <span class="dt">time =</span> <span class="kw">col_time</span>(<span class="dt">format =</span> <span class="st">&quot;&quot;</span>),</span>
+<span id="cb1-14"><a href="#cb1-14"></a>  <span class="dt">yrdln =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-15"><a href="#cb1-15"></a>  <span class="dt">desc =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-16"><a href="#cb1-16"></a>  <span class="dt">play_type =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-17"><a href="#cb1-17"></a>  <span class="dt">pass_length =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-18"><a href="#cb1-18"></a>  <span class="dt">pass_location =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-19"><a href="#cb1-19"></a>  <span class="dt">run_location =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-20"><a href="#cb1-20"></a>  <span class="dt">run_gap =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-21"><a href="#cb1-21"></a>  <span class="dt">field_goal_result =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-22"><a href="#cb1-22"></a>  <span class="dt">extra_point_result =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-23"><a href="#cb1-23"></a>  <span class="dt">two_point_conv_result =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-24"><a href="#cb1-24"></a>  <span class="dt">timeout_team =</span> <span class="kw">col_character</span>()</span>
+<span id="cb1-25"><a href="#cb1-25"></a>  <span class="co"># ... with 88 more columns</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a>)</span>
+<span id="cb1-27"><a href="#cb1-27"></a>See <span class="kw">spec</span>(...) <span class="cf">for</span> full column specifications.</span>
+<span id="cb1-28"><a href="#cb1-28"></a>Warning<span class="op">:</span><span class="st"> </span><span class="dv">6</span> parsing failures.</span>
+<span id="cb1-29"><a href="#cb1-29"></a> row                                col           expected     actual                                                                                                             file</span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="dv">1226</span> lateral_rusher_player_id           <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> <span class="dv">00-0030496</span> <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="dv">1226</span> lateral_rusher_player_name         <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> L.Bell     <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="dv">1862</span> lateral_interception_player_id     <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> <span class="dv">00-0027762</span> <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="dv">1862</span> lateral_interception_player_name   <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> R.Jones    <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="dv">2109</span> lateral_kickoff_returner_player_id <span class="dv">1</span><span class="op">/</span><span class="dv">0</span><span class="op">/</span>T<span class="op">/</span>F<span class="op">/</span><span class="ot">TRUE</span><span class="op">/</span><span class="ot">FALSE</span> <span class="dv">00-0030288</span> <span class="st">&#39;https://raw.githubusercontent.com/ryurko/nflscrapR-data/master/play_by_play_data/post_season/post_pbp_2017.csv&#39;</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a>.... .................................. .................. .......... ................................................................................................................</span>
+<span id="cb1-36"><a href="#cb1-36"></a>See <span class="kw">problems</span>(...) <span class="cf">for</span> more details.</span></code></pre></div>
 <p>This has loaded the entire play-by-play from the 2017 post-season (including the Pro Bowl!). We’re going to filter this data down to the Super Bowl only, which has the <code>game_id</code> of 2018020400 And to make this simpler, we’re going to <code>select</code> only a subset of the columns to work with</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp &lt;-<span class="st"> </span>post_pbp_<span class="dv">2017</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="co"># Only grab the Super Bowl</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(game_id <span class="op">==</span><span class="st"> </span><span class="dv">2018020400</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="co"># First grab context about the play:</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(posteam, defteam, drive, qtr, down, ydstogo, yardline_<span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="op">+</span><span class="st">          </span>half_seconds_remaining, score_differential,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="op">+</span><span class="st">          </span><span class="co"># Next data on the result:</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="op">+</span><span class="st">          </span>desc, play_type, yards_gained, sp,</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="op">+</span><span class="st">          </span><span class="co"># Finally the advanced metrics:</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="op">+</span><span class="st">          </span>ep, wp, epa, wpa)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp &lt;-<span class="st"> </span>post_pbp_<span class="dv">2017</span> <span class="op">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">+</span><span class="st">   </span><span class="co"># Only grab the Super Bowl</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(game_id <span class="op">==</span><span class="st"> </span><span class="dv">2018020400</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="op">+</span><span class="st">   </span><span class="co"># First grab context about the play:</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(posteam, defteam, drive, qtr, down, ydstogo, yardline_<span class="dv">100</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="op">+</span><span class="st">          </span>half_seconds_remaining, score_differential,</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="op">+</span><span class="st">          </span><span class="co"># Next data on the result:</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="op">+</span><span class="st">          </span>desc, play_type, yards_gained, sp,</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="op">+</span><span class="st">          </span><span class="co"># Finally the advanced metrics:</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="op">+</span><span class="st">          </span>ep, wp, epa, wpa)</span></code></pre></div>
 </div>
 <div id="team-comparison" class="section level2">
 <h2>Team comparison</h2>
 <p>Now using this dataset, we can proceed to compare the performance and decision making of the Eagles and the Patriots. First what plays did they call?</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">count</span>()</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co"># A tibble: 15 x 4</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co"># Groups:   posteam, down, play_type [15]</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">   posteam  down play_type     n</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">     </span><span class="er">&lt;</span>int<span class="op">&gt;</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="st"> </span><span class="dv">1</span> NE          <span class="dv">1</span> pass         <span class="dv">20</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"> <span class="dv">2</span> NE          <span class="dv">1</span> run          <span class="dv">14</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"> <span class="dv">3</span> NE          <span class="dv">2</span> pass         <span class="dv">17</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"> <span class="dv">4</span> NE          <span class="dv">2</span> run           <span class="dv">7</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"> <span class="dv">5</span> NE          <span class="dv">3</span> pass          <span class="dv">9</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"> <span class="dv">6</span> NE          <span class="dv">3</span> run           <span class="dv">1</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"> <span class="dv">7</span> NE          <span class="dv">4</span> pass          <span class="dv">2</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"> <span class="dv">8</span> PHI         <span class="dv">1</span> pass         <span class="dv">13</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"> <span class="dv">9</span> PHI         <span class="dv">1</span> run          <span class="dv">17</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="dv">10</span> PHI         <span class="dv">2</span> pass         <span class="dv">15</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="dv">11</span> PHI         <span class="dv">2</span> run           <span class="dv">8</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="dv">12</span> PHI         <span class="dv">3</span> pass         <span class="dv">14</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="dv">13</span> PHI         <span class="dv">3</span> run           <span class="dv">2</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="dv">14</span> PHI         <span class="dv">4</span> pass          <span class="dv">2</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="dv">15</span> PHI        <span class="ot">NA</span> pass          <span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">count</span>()</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># A tibble: 15 x 4</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># Groups:   posteam, down, play_type [15]</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>   posteam  down play_type     n</span>
+<span id="cb3-8"><a href="#cb3-8"></a>   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">     </span><span class="er">&lt;</span>int<span class="op">&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="st"> </span><span class="dv">1</span> NE          <span class="dv">1</span> pass         <span class="dv">20</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a> <span class="dv">2</span> NE          <span class="dv">1</span> run          <span class="dv">14</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a> <span class="dv">3</span> NE          <span class="dv">2</span> pass         <span class="dv">17</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a> <span class="dv">4</span> NE          <span class="dv">2</span> run           <span class="dv">7</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a> <span class="dv">5</span> NE          <span class="dv">3</span> pass          <span class="dv">9</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a> <span class="dv">6</span> NE          <span class="dv">3</span> run           <span class="dv">1</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a> <span class="dv">7</span> NE          <span class="dv">4</span> pass          <span class="dv">2</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a> <span class="dv">8</span> PHI         <span class="dv">1</span> pass         <span class="dv">13</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a> <span class="dv">9</span> PHI         <span class="dv">1</span> run          <span class="dv">17</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="dv">10</span> PHI         <span class="dv">2</span> pass         <span class="dv">15</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="dv">11</span> PHI         <span class="dv">2</span> run           <span class="dv">8</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="dv">12</span> PHI         <span class="dv">3</span> pass         <span class="dv">14</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="dv">13</span> PHI         <span class="dv">3</span> run           <span class="dv">2</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="dv">14</span> PHI         <span class="dv">4</span> pass          <span class="dv">2</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="dv">15</span> PHI        <span class="ot">NA</span> pass          <span class="dv">2</span></span></code></pre></div>
 <p>We can directly plot the proportions for each team as side-by-side barcharts</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">count</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="co"># Now let&#39;s remove that NA from the two point conversion:</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="co"># Looking at counts really isn&#39;t appropriate, let&#39;s compare the proportions:</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">n_plays =</span> <span class="kw">sum</span>(n),</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="op">+</span><span class="st">          </span><span class="dt">prop_plays =</span> n <span class="op">/</span><span class="st"> </span>n_plays) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="op">+</span><span class="st">   </span><span class="co"># Now actually create the chart!</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> prop_plays, <span class="dt">fill =</span> posteam)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="op">+</span><span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion of plays&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">count</span>() <span class="op">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="op">+</span><span class="st">   </span><span class="co"># Now let&#39;s remove that NA from the two point conversion:</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="op">+</span><span class="st">   </span><span class="co"># Looking at counts really isn&#39;t appropriate, let&#39;s compare the proportions:</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down) <span class="op">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">n_plays =</span> <span class="kw">sum</span>(n),</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="op">+</span><span class="st">          </span><span class="dt">prop_plays =</span> n <span class="op">/</span><span class="st"> </span>n_plays) <span class="op">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="op">+</span><span class="st">   </span><span class="co"># Now actually create the chart!</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> prop_plays, <span class="dt">fill =</span> posteam)) <span class="op">+</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion of plays&quot;</span>)</span></code></pre></div>
 <p><img src="nfl_lecture_files/figure-html/play-call-bars-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>To make this better, we can use the actual team colors based on a dataset from the <code>nflscrapR</code> package. For the Patriots we’ll use their secondary color #c60c30 and we’ll use the Eagles primary color of #004953.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>ne_color &lt;-<span class="st"> &quot;#c60c30&quot;</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="op">&gt;</span><span class="st"> </span>phi_color &lt;-<span class="st"> &quot;#004953&quot;</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="op">&gt;</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="er">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="kw">count</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">n_plays =</span> <span class="kw">sum</span>(n),</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="op">+</span><span class="st">          </span><span class="dt">prop_plays =</span> n <span class="op">/</span><span class="st"> </span>n_plays) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> prop_plays, <span class="dt">fill =</span> posteam)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="op">+</span><span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion of plays&quot;</span>,</a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>,</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of Patriots and Eagles play-calling by down&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;</span><span class="st"> </span>ne_color &lt;-<span class="st"> &quot;#c60c30&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;</span><span class="st"> </span>phi_color &lt;-<span class="st"> &quot;#004953&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="er">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">+</span><span class="st">   </span><span class="kw">count</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down) <span class="op">%&gt;%</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">n_plays =</span> <span class="kw">sum</span>(n),</span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="op">+</span><span class="st">          </span><span class="dt">prop_plays =</span> n <span class="op">/</span><span class="st"> </span>n_plays) <span class="op">%&gt;%</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> prop_plays, <span class="dt">fill =</span> posteam)) <span class="op">+</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion of plays&quot;</span>,</span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>,</span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of Patriots and Eagles play-calling by down&quot;</span>) <span class="op">+</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</span></code></pre></div>
 <p><img src="nfl_lecture_files/figure-html/color-bars-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Let’s take a look at the performance of these plays by yards-gained:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="co"># Now use the summarise function, generate the average yards gained:</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">summarize</span>(<span class="dt">yards_per_play =</span> <span class="kw">mean</span>(yards_gained)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> yards_per_play, <span class="dt">fill =</span> posteam)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="op">+</span><span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Yards per play&quot;</span>,</a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>,</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of NE and PHI yards gained per play by type and down&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam, down, play_type) <span class="op">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="op">+</span><span class="st">   </span><span class="co"># Now use the summarise function, generate the average yards gained:</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">summarize</span>(<span class="dt">yards_per_play =</span> <span class="kw">mean</span>(yards_gained)) <span class="op">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> yards_per_play, <span class="dt">fill =</span> posteam)) <span class="op">+</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Yards per play&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>,</span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of NE and PHI yards gained per play by type and down&quot;</span>) <span class="op">+</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="st">`</span><span class="dt">summarise()</span><span class="st">`</span> regrouping output by <span class="st">&#39;posteam&#39;</span>, <span class="st">&#39;down&#39;</span> (override with <span class="st">`</span><span class="dt">.groups</span><span class="st">`</span> argument)</span></code></pre></div>
 <p><img src="nfl_lecture_files/figure-html/yards-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>One number summaries toss out alot of information! Let’s view the entire distribution instead. One of the best ways to do this is with a <strong>beeswarm</strong> plot - which displays the actual individual points rather than smoothed summaries. We’ll display these points on top of <strong>violin</strong> plots which provide us with the general shape of the distributions</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span><span class="co"># Install ggbeeswarm</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="er">&gt;</span><span class="st"> </span><span class="co"># install.packages(&quot;ggbeeswarm&quot;)</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="er">&gt;</span><span class="st"> </span><span class="kw">library</span>(ggbeeswarm)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> yards_gained, <span class="dt">fill =</span> posteam, <span class="dt">color =</span> posteam)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="op">+</span><span class="st">   </span><span class="kw">geom_violin</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="op">+</span><span class="st">   </span><span class="co"># Display the individual points on top of the violin plots:</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="op">+</span><span class="st">   </span><span class="kw">geom_beeswarm</span>(<span class="dt">dodge.width =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="op">+</span><span class="st">   </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Yards per play&quot;</span>,</a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Team&quot;</span>,</a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of NE and PHI yards gained per play by type and down&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>() </a>
-<a class="sourceLine" id="cb7-18" data-line-number="18">Warning <span class="cf">in</span> <span class="kw">max</span>(data<span class="op">$</span>density)<span class="op">:</span><span class="st"> </span>no non<span class="op">-</span>missing arguments to max; returning <span class="op">-</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="ot">Inf</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="co"># Install ggbeeswarm</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="er">&gt;</span><span class="st"> </span><span class="co"># install.packages(&quot;ggbeeswarm&quot;)</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="er">&gt;</span><span class="st"> </span><span class="kw">library</span>(ggbeeswarm)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> yards_gained, <span class="dt">fill =</span> posteam, <span class="dt">color =</span> posteam)) <span class="op">+</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_violin</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="op">+</span><span class="st">   </span><span class="co"># Display the individual points on top of the violin plots:</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_beeswarm</span>(<span class="dt">dodge.width =</span> <span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Yards per play&quot;</span>,</span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Team&quot;</span>,</span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of NE and PHI yards gained per play by type and down&quot;</span>) <span class="op">+</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>() </span>
+<span id="cb7-18"><a href="#cb7-18"></a>Warning <span class="cf">in</span> <span class="kw">max</span>(data<span class="op">$</span>density)<span class="op">:</span><span class="st"> </span>no non<span class="op">-</span>missing arguments to max; returning <span class="op">-</span><span class="ot">Inf</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a>Warning<span class="op">:</span><span class="st"> </span>Computation failed <span class="cf">in</span> <span class="st">`</span><span class="dt">stat_ydensity()</span><span class="st">`</span><span class="op">:</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a>replacement has <span class="dv">1</span> row, data has <span class="dv">0</span></span></code></pre></div>
 <p><img src="nfl_lecture_files/figure-html/beeswarm-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="win-probability-impact" class="section level2">
 <h2>Win probability impact</h2>
 <p>All yards are not created equal! We should really be looking at the impact in terms of win probability added (WPA) instead to get a better understanding of what impacted the game.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> wpa, <span class="dt">fill =</span> posteam)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">geom_violin</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">geom_beeswarm</span>(<span class="kw">aes</span>(<span class="dt">color =</span> posteam), <span class="dt">dodge.width =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>, </a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="op">+</span><span class="st">              </span><span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="op">+</span><span class="st">   </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color), <span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Win probability added (WPA)&quot;</span>,</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>,</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of NE and PHI WPA by type and down&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb8-16" data-line-number="16">Warning<span class="op">:</span><span class="st"> </span>Removed <span class="dv">1</span> rows containing non<span class="op">-</span>finite <span class="kw">values</span> (stat_ydensity).</a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">Warning <span class="cf">in</span> <span class="kw">max</span>(data<span class="op">$</span>density)<span class="op">:</span><span class="st"> </span>no non<span class="op">-</span>missing arguments to max; returning <span class="op">-</span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="ot">Inf</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">Warning<span class="op">:</span><span class="st"> </span>Removed <span class="dv">1</span> rows containing missing <span class="kw">values</span> (position_beeswarm).</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(play_type <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pass&quot;</span>, <span class="st">&quot;run&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> play_type, <span class="dt">y =</span> wpa, <span class="dt">fill =</span> posteam)) <span class="op">+</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_violin</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_beeswarm</span>(<span class="kw">aes</span>(<span class="dt">color =</span> posteam), <span class="dt">dodge.width =</span> <span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>, </span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="op">+</span><span class="st">              </span><span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="op">+</span><span class="st">   </span><span class="kw">facet_wrap</span>(<span class="op">~</span>down, <span class="dt">ncol =</span> <span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color)) <span class="op">+</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(ne_color, phi_color), <span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Play type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Win probability added (WPA)&quot;</span>,</span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="op">+</span><span class="st">        </span><span class="dt">fill =</span> <span class="st">&quot;Team&quot;</span>,</span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="op">+</span><span class="st">        </span><span class="dt">title =</span> <span class="st">&quot;Comparison of NE and PHI WPA by type and down&quot;</span>) <span class="op">+</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</span>
+<span id="cb8-16"><a href="#cb8-16"></a>Warning<span class="op">:</span><span class="st"> </span>Removed <span class="dv">1</span> rows containing non<span class="op">-</span>finite <span class="kw">values</span> (stat_ydensity).</span>
+<span id="cb8-17"><a href="#cb8-17"></a>Warning <span class="cf">in</span> <span class="kw">max</span>(data<span class="op">$</span>density)<span class="op">:</span><span class="st"> </span>no non<span class="op">-</span>missing arguments to max; returning <span class="op">-</span><span class="ot">Inf</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>Warning<span class="op">:</span><span class="st"> </span>Computation failed <span class="cf">in</span> <span class="st">`</span><span class="dt">stat_ydensity()</span><span class="st">`</span><span class="op">:</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>replacement has <span class="dv">1</span> row, data has <span class="dv">0</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>Warning<span class="op">:</span><span class="st"> </span>Removed <span class="dv">1</span> rows containing missing <span class="kw">values</span> (position_beeswarm).</span></code></pre></div>
 <p><img src="nfl_lecture_files/figure-html/wpa-dist-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Now we see a big difference between the Eagles and Patriots, especially on those fourth down passing attempts… which plays are those?</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(posteam <span class="op">==</span><span class="st"> &quot;PHI&quot;</span>,</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="op">+</span><span class="st">          </span>play_type <span class="op">==</span><span class="st"> &quot;pass&quot;</span>,</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="op">+</span><span class="st">          </span><span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">arrange</span>(<span class="kw">desc</span>(wpa)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(desc, wpa, down, qtr) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="op">+</span><span class="st">   </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">Adding missing grouping variables<span class="op">:</span><span class="st"> `</span><span class="dt">posteam</span><span class="st">`</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co"># A tibble: 3 x 5</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co"># Groups:   posteam [1]</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12">  posteam desc                                              wpa  down   qtr</a>
-<a class="sourceLine" id="cb9-13" data-line-number="13">  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">                                           </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="dv">1</span> <span class="kw">PHI</span>     (<span class="dv">2</span><span class="op">:</span><span class="dv">25</span>) (Shotgun) N.Foles pass short left to Z.… <span class="fl">0.211</span>     <span class="dv">3</span>     <span class="dv">4</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="dv">2</span> <span class="kw">PHI</span>     (<span class="op">:</span><span class="dv">38</span>) (Shotgun) T.Burton pass short right to N… <span class="fl">0.127</span>     <span class="dv">4</span>     <span class="dv">2</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="dv">3</span> <span class="kw">PHI</span>     (<span class="dv">5</span><span class="op">:</span><span class="dv">39</span>) (Shotgun) N.Foles pass short left to Z.… <span class="fl">0.111</span>     <span class="dv">4</span>     <span class="dv">4</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;</span><span class="st"> </span>super_bowl_pbp <span class="op">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(posteam) <span class="op">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(posteam <span class="op">==</span><span class="st"> &quot;PHI&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="op">+</span><span class="st">          </span>play_type <span class="op">==</span><span class="st"> &quot;pass&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="op">+</span><span class="st">          </span><span class="op">!</span><span class="kw">is.na</span>(down)) <span class="op">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">arrange</span>(<span class="kw">desc</span>(wpa)) <span class="op">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(desc, wpa, down, qtr) <span class="op">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="op">+</span><span class="st">   </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)</span>
+<span id="cb9-9"><a href="#cb9-9"></a>Adding missing grouping variables<span class="op">:</span><span class="st"> `</span><span class="dt">posteam</span><span class="st">`</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co"># A tibble: 3 x 5</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co"># Groups:   posteam [1]</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>  posteam desc                                                                                                                wpa  down   qtr</span>
+<span id="cb9-13"><a href="#cb9-13"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">                                                                                                             </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="dv">1</span> <span class="kw">PHI</span>     (<span class="dv">2</span><span class="op">:</span><span class="dv">25</span>) (Shotgun) N.Foles pass short left to Z.Ertz <span class="cf">for</span> <span class="dv">11</span> yards, TOUCHDOWN. The Replay Official reviewed the pas… <span class="fl">0.211</span>     <span class="dv">3</span>     <span class="dv">4</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="dv">2</span> <span class="kw">PHI</span>     (<span class="op">:</span><span class="dv">38</span>) (Shotgun) T.Burton pass short right to N.Foles <span class="cf">for</span> <span class="dv">1</span> yard, TOUCHDOWN. PHI <span class="dv">9</span><span class="op">-</span>N.Foles first career Reception. <span class="fl">0.127</span>     <span class="dv">4</span>     <span class="dv">2</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="dv">3</span> <span class="kw">PHI</span>     (<span class="dv">5</span><span class="op">:</span><span class="dv">39</span>) (Shotgun) N.Foles pass short left to Z.Ertz to PHI <span class="dv">47</span> <span class="cf">for</span> <span class="dv">2</span> <span class="kw">yards</span> (D.Harmon) [T.Flowers].                  <span class="fl">0.111</span>     <span class="dv">4</span>     <span class="dv">4</span></span></code></pre></div>
 <p>The number one play was the go-ahead TD pass which gave the Eagles the lead in the 4th quarter, while the second highest play was the famous Philly Special!</p>
 </div>
 <div id="win-probability-chart" class="section level2">
 <h2>Win probability chart</h2>
 <p>Finally, we can wrap up this analysis with a win probability chart that shows the overall story of the game.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span><span class="co"># Let&#39;s put this all together to display a win probability chart:</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="er">&gt;</span><span class="st"> </span>post_pbp_<span class="dv">2017</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="co"># Only grab the Super Bowl</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(game_id <span class="op">==</span><span class="st"> </span><span class="dv">2018020400</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(home_wp),</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="op">+</span><span class="st">          </span><span class="op">!</span><span class="kw">is.na</span>(away_wp),</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="op">+</span><span class="st">          </span>timeout <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(game_seconds_remaining,</a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="op">+</span><span class="st">          </span>home_wp,</a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="op">+</span><span class="st">          </span>away_wp) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="op">+</span><span class="st">   </span><span class="co"># Rather than having separate columns for each team&#39;s win probability,</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="op">+</span><span class="st">   </span><span class="co"># we can gather them into one column:</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="op">+</span><span class="st">   </span><span class="kw">gather</span>(team, wpa, <span class="op">-</span>game_seconds_remaining) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> game_seconds_remaining, <span class="dt">y =</span> wpa, <span class="dt">color =</span> team)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="op">+</span><span class="st">   </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="op">+</span><span class="st">   </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="op">+</span><span class="st">   </span><span class="kw">scale_color_manual</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;PHI&quot;</span>, <span class="st">&quot;NE&quot;</span>),</a>
-<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="op">+</span><span class="st">                      </span><span class="dt">values =</span> <span class="kw">c</span>(phi_color, ne_color),</a>
-<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="op">+</span><span class="st">                      </span><span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="op">+</span><span class="st">   </span><span class="kw">scale_x_reverse</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3600</span>, <span class="dv">300</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="op">+</span><span class="st">   </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="dv">3000</span>, <span class="dt">y =</span> <span class="fl">.80</span>, <span class="dt">label =</span> <span class="st">&quot;PHI&quot;</span>, <span class="dt">color =</span> phi_color, <span class="dt">size =</span> <span class="dv">8</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="op">+</span><span class="st">   </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="dv">3000</span>, <span class="dt">y =</span> <span class="fl">.20</span>, <span class="dt">label =</span> <span class="st">&quot;NE&quot;</span>, <span class="dt">color =</span> ne_color, <span class="dt">size =</span> <span class="dv">8</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-23" data-line-number="23"><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">900</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-24" data-line-number="24"><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1800</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-25" data-line-number="25"><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">2700</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-26" data-line-number="26"><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-27" data-line-number="27"><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(</a>
-<a class="sourceLine" id="cb10-28" data-line-number="28"><span class="op">+</span><span class="st">     </span><span class="dt">x =</span> <span class="st">&quot;Time Remaining (seconds)&quot;</span>,</a>
-<a class="sourceLine" id="cb10-29" data-line-number="29"><span class="op">+</span><span class="st">     </span><span class="dt">y =</span> <span class="st">&quot;Win Probability&quot;</span>,</a>
-<a class="sourceLine" id="cb10-30" data-line-number="30"><span class="op">+</span><span class="st">     </span><span class="dt">title =</span> <span class="st">&quot;Super Bowl LII Win Probability Chart&quot;</span>,</a>
-<a class="sourceLine" id="cb10-31" data-line-number="31"><span class="op">+</span><span class="st">     </span><span class="dt">subtitle =</span> <span class="st">&quot;New England Patriots vs Philadelphia Eagles&quot;</span>,</a>
-<a class="sourceLine" id="cb10-32" data-line-number="32"><span class="op">+</span><span class="st">     </span><span class="dt">caption =</span> <span class="st">&quot;Data from nflscrapR&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-33" data-line-number="33"><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="co"># Let&#39;s put this all together to display a win probability chart:</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="er">&gt;</span><span class="st"> </span>post_pbp_<span class="dv">2017</span> <span class="op">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="op">+</span><span class="st">   </span><span class="co"># Only grab the Super Bowl</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(game_id <span class="op">==</span><span class="st"> </span><span class="dv">2018020400</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(home_wp),</span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="op">+</span><span class="st">          </span><span class="op">!</span><span class="kw">is.na</span>(away_wp),</span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="op">+</span><span class="st">          </span>timeout <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(game_seconds_remaining,</span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="op">+</span><span class="st">          </span>home_wp,</span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="op">+</span><span class="st">          </span>away_wp) <span class="op">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="op">+</span><span class="st">   </span><span class="co"># Rather than having separate columns for each team&#39;s win probability,</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="op">+</span><span class="st">   </span><span class="co"># we can gather them into one column:</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="op">+</span><span class="st">   </span><span class="kw">gather</span>(team, wpa, <span class="op">-</span>game_seconds_remaining) <span class="op">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="op">+</span><span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> game_seconds_remaining, <span class="dt">y =</span> wpa, <span class="dt">color =</span> team)) <span class="op">+</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_color_manual</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;PHI&quot;</span>, <span class="st">&quot;NE&quot;</span>),</span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="op">+</span><span class="st">                      </span><span class="dt">values =</span> <span class="kw">c</span>(phi_color, ne_color),</span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="op">+</span><span class="st">                      </span><span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="op">+</span><span class="st">   </span><span class="kw">scale_x_reverse</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3600</span>, <span class="dv">300</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="op">+</span><span class="st">   </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="dv">3000</span>, <span class="dt">y =</span> <span class="fl">.80</span>, <span class="dt">label =</span> <span class="st">&quot;PHI&quot;</span>, <span class="dt">color =</span> phi_color, <span class="dt">size =</span> <span class="dv">8</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="op">+</span><span class="st">   </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="dv">3000</span>, <span class="dt">y =</span> <span class="fl">.20</span>, <span class="dt">label =</span> <span class="st">&quot;NE&quot;</span>, <span class="dt">color =</span> ne_color, <span class="dt">size =</span> <span class="dv">8</span>) <span class="op">+</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">900</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1800</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">2700</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="op">+</span><span class="st">   </span><span class="kw">labs</span>(</span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="op">+</span><span class="st">     </span><span class="dt">x =</span> <span class="st">&quot;Time Remaining (seconds)&quot;</span>,</span>
+<span id="cb10-29"><a href="#cb10-29"></a><span class="op">+</span><span class="st">     </span><span class="dt">y =</span> <span class="st">&quot;Win Probability&quot;</span>,</span>
+<span id="cb10-30"><a href="#cb10-30"></a><span class="op">+</span><span class="st">     </span><span class="dt">title =</span> <span class="st">&quot;Super Bowl LII Win Probability Chart&quot;</span>,</span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="op">+</span><span class="st">     </span><span class="dt">subtitle =</span> <span class="st">&quot;New England Patriots vs Philadelphia Eagles&quot;</span>,</span>
+<span id="cb10-32"><a href="#cb10-32"></a><span class="op">+</span><span class="st">     </span><span class="dt">caption =</span> <span class="st">&quot;Data from nflscrapR&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb10-33"><a href="#cb10-33"></a><span class="op">+</span><span class="st">   </span><span class="kw">theme_bw</span>()</span></code></pre></div>
 <p><img src="nfl_lecture_files/figure-html/wp-game-chart-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Congratulations, you now have what it takes to cover NFL games for the Athletic!</p>
 </div>
@@ -765,6 +753,28 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

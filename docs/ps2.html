@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -27,9 +27,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -39,14 +39,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -55,9 +57,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -111,7 +113,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -168,7 +170,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -317,6 +318,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -329,27 +331,10 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 <style type="text/css">
 .code-folding-btn { margin-bottom: 4px; }
 </style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("show" === "show");
-});
-</script>
 
 
 
@@ -372,7 +357,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">WMA19</a>
+      <a class="navbar-brand" href="index.html">WMA2020</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -522,24 +507,24 @@ $(document).ready(function () {
 <ol style="list-style-type: decimal">
 <li>Read the data in from the file and save it as a tbl called “relative_payroll”</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">relative_payroll &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;data/mlb_relative_payrolls.csv&quot;</span>)</a></code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   Team = col_character(),
-##   GM = col_character(),
-##   Team_Payroll = col_double(),
-##   Winning_Percentage = col_double(),
-##   Year = col_double(),
-##   Relative_Payroll = col_double()
-## )</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;</span><span class="st"> </span>relative_payroll &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;data/mlb_relative_payrolls.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>Parsed with column specification<span class="op">:</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">cols</span>(</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">Team =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="dt">GM =</span> <span class="kw">col_character</span>(),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="dt">Team_Payroll =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="dt">Winning_Percentage =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb1-8"><a href="#cb1-8"></a>  <span class="dt">Year =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="dt">Relative_Payroll =</span> <span class="kw">col_double</span>()</span>
+<span id="cb1-10"><a href="#cb1-10"></a>)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Make a histogram of team winning percentages. Play around with different binwidths.</p></li>
 <li><p>Make a histogram of the relative payrolls.</p></li>
 <li><p>Make a scatterplot with relative payroll on the horizontal axis and winning percentage on the vertical axis.</p></li>
 <li><p>Without executing the code below, discuss with your group and see if you can figure out what it is doing.</p></li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> relative_payroll) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> Team_Payroll))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> relative_payroll) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> Team_Payroll))</span></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
 <li>Execute the code above. What can you say about how team payrolls have evolved over time? Make a similar plot that visualizes how <em>relative payrolls</em> have evolved over time.</li>
 </ol>
@@ -550,27 +535,27 @@ $(document).ready(function () {
 <ol style="list-style-type: decimal">
 <li>Load the data into a tibble called <code>hitting_qualified</code> using <code>read_csv()</code>.</li>
 </ol>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_double(),
-##   playerID = col_character(),
-##   teamID = col_character(),
-##   lgID = col_character(),
-##   CS = col_logical(),
-##   IBB = col_logical(),
-##   SF = col_logical(),
-##   GIDP = col_logical()
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
-<pre><code>## Warning: 28057 parsing failures.
-##  row col           expected actual                         file
-## 1870  CS 1/0/T/F/TRUE/FALSE     23 &#39;data/hitting_qualified.csv&#39;
-## 1871  CS 1/0/T/F/TRUE/FALSE     20 &#39;data/hitting_qualified.csv&#39;
-## 1872  CS 1/0/T/F/TRUE/FALSE     13 &#39;data/hitting_qualified.csv&#39;
-## 1877  CS 1/0/T/F/TRUE/FALSE     15 &#39;data/hitting_qualified.csv&#39;
-## 1880  CS 1/0/T/F/TRUE/FALSE     13 &#39;data/hitting_qualified.csv&#39;
-## .... ... .................. ...... ............................
-## See problems(...) for more details.</code></pre>
+<pre><code>Parsed with column specification:
+cols(
+  .default = col_double(),
+  playerID = col_character(),
+  teamID = col_character(),
+  lgID = col_character(),
+  CS = col_logical(),
+  IBB = col_logical(),
+  SF = col_logical(),
+  GIDP = col_logical()
+)
+See spec(...) for full column specifications.
+Warning: 28057 parsing failures.
+ row col           expected actual                         file
+1870  CS 1/0/T/F/TRUE/FALSE     23 &#39;data/hitting_qualified.csv&#39;
+1871  CS 1/0/T/F/TRUE/FALSE     20 &#39;data/hitting_qualified.csv&#39;
+1872  CS 1/0/T/F/TRUE/FALSE     13 &#39;data/hitting_qualified.csv&#39;
+1877  CS 1/0/T/F/TRUE/FALSE     15 &#39;data/hitting_qualified.csv&#39;
+1880  CS 1/0/T/F/TRUE/FALSE     13 &#39;data/hitting_qualified.csv&#39;
+.... ... .................. ...... ............................
+See problems(...) for more details.</code></pre>
 <p>The columns of this dataset include</p>
 <ul>
 <li><code>playerID</code>: the player’s ID code</li>
@@ -602,68 +587,68 @@ $(document).ready(function () {
 <li><p>Use <code>summarize()</code> to find out the first and last season for which we have data. <em>Hint, you only need one line of code to do this</em></p></li>
 <li><p>When you print out <code>hitting_qualified</code> you’ll notice that some columns were read in as characters and not integers or numerics. This can happen sometimes whenever the original csv file has missing values. In this case, the columns IBB, HBP, SH, SF, and GIDP were read in as characters. We want to <em>convert</em> these to integers. We can do this using <code>mutate()</code> and the function <code>as.integer()</code>.</p></li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">hitting_qualified &lt;-<span class="st"> </span><span class="kw">mutate</span>(hitting_qualified,</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">                            <span class="dt">IBB =</span> <span class="kw">as.integer</span>(IBB),</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">                            <span class="dt">HBP =</span> <span class="kw">as.integer</span>(HBP),</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                            <span class="dt">SH =</span> <span class="kw">as.integer</span>(SH),</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">                            <span class="dt">SF =</span> <span class="kw">as.integer</span>(SF),</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">                            <span class="dt">GIDP =</span> <span class="kw">as.integer</span>(GIDP))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;</span><span class="st"> </span>hitting_qualified &lt;-<span class="st"> </span><span class="kw">mutate</span>(hitting_qualified,</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">+</span><span class="st">                             </span><span class="dt">IBB =</span> <span class="kw">as.integer</span>(IBB),</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">+</span><span class="st">                             </span><span class="dt">HBP =</span> <span class="kw">as.integer</span>(HBP),</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">+</span><span class="st">                             </span><span class="dt">SH =</span> <span class="kw">as.integer</span>(SH),</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="op">+</span><span class="st">                             </span><span class="dt">SF =</span> <span class="kw">as.integer</span>(SF),</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="op">+</span><span class="st">                             </span><span class="dt">GIDP =</span> <span class="kw">as.integer</span>(GIDP))</span></code></pre></div>
 <ol start="5" style="list-style-type: decimal">
 <li>Let’s take a look at some of the columns we just converted:</li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">select</span>(hitting_qualified, playerID, yearID, AB, IBB, HBP, SH, SF, GIDP)</a></code></pre></div>
-<pre><code>## # A tibble: 12,043 x 8
-##    playerID  yearID    AB   IBB   HBP    SH    SF  GIDP
-##    &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
-##  1 ansonca01   1884   475    NA    NA    NA    NA    NA
-##  2 bradyst01   1884   485    NA     0    NA    NA    NA
-##  3 connoro01   1884   477    NA    NA    NA    NA    NA
-##  4 dalryab01   1884   521    NA    NA    NA    NA    NA
-##  5 farreja02   1884   469    NA    NA    NA    NA    NA
-##  6 gleasbi01   1884   472    NA    12    NA    NA    NA
-##  7 hinespa01   1884   490    NA    NA    NA    NA    NA
-##  8 hornujo01   1884   518    NA    NA    NA    NA    NA
-##  9 jonesch01   1884   472    NA    10    NA    NA    NA
-## 10 nelsoca01   1884   432    NA     9    NA    NA    NA
-## # … with 12,033 more rows</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">select</span>(hitting_qualified, playerID, yearID, AB, IBB, HBP, SH, SF, GIDP)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># A tibble: 12,043 x 8</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>   playerID  yearID    AB   IBB   HBP    SH    SF  GIDP</span>
+<span id="cb5-4"><a href="#cb5-4"></a>   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="st"> </span><span class="dv">1</span> ansonca01   <span class="dv">1884</span>   <span class="dv">475</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a> <span class="dv">2</span> bradyst01   <span class="dv">1884</span>   <span class="dv">485</span>    <span class="ot">NA</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a> <span class="dv">3</span> connoro01   <span class="dv">1884</span>   <span class="dv">477</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a> <span class="dv">4</span> dalryab01   <span class="dv">1884</span>   <span class="dv">521</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a> <span class="dv">5</span> farreja02   <span class="dv">1884</span>   <span class="dv">469</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a> <span class="dv">6</span> gleasbi01   <span class="dv">1884</span>   <span class="dv">472</span>    <span class="ot">NA</span>    <span class="dv">12</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a> <span class="dv">7</span> hinespa01   <span class="dv">1884</span>   <span class="dv">490</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a> <span class="dv">8</span> hornujo01   <span class="dv">1884</span>   <span class="dv">518</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a> <span class="dv">9</span> jonesch01   <span class="dv">1884</span>   <span class="dv">472</span>    <span class="ot">NA</span>    <span class="dv">10</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="dv">10</span> nelsoca01   <span class="dv">1884</span>   <span class="dv">432</span>    <span class="ot">NA</span>     <span class="dv">9</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co"># … with 12,033 more rows</span></span></code></pre></div>
 <p>You’ll notice that a lot of these columns contain <code>NA</code> values, which indicates that some of these values are missing. This make sense, since a lot of these statistics were not recorded in the early years of baseball. A popular convention for dealing with these missing statistics is to <strong>impute</strong> the missing values with 0. That is, for instance, every place we see an <code>NA</code> we need to replace it with a 0. We can do that with <code>mutate()</code> and <code>replace_na()</code> function as follows.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">hitting_qualified &lt;-<span class="st"> </span><span class="kw">replace_na</span>(hitting_qualified, </a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">                                <span class="kw">list</span>(<span class="dt">IBB =</span> <span class="dv">0</span>, <span class="dt">HBP =</span> <span class="dv">0</span>, <span class="dt">SH =</span> <span class="dv">0</span>, <span class="dt">SF =</span> <span class="dv">0</span>, <span class="dt">GIDP =</span> <span class="dv">0</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;</span><span class="st"> </span>hitting_qualified &lt;-<span class="st"> </span><span class="kw">replace_na</span>(hitting_qualified, </span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">+</span><span class="st">                                 </span><span class="kw">list</span>(<span class="dt">IBB =</span> <span class="dv">0</span>, <span class="dt">HBP =</span> <span class="dv">0</span>, <span class="dt">SH =</span> <span class="dv">0</span>, <span class="dt">SF =</span> <span class="dv">0</span>, <span class="dt">GIDP =</span> <span class="dv">0</span>))</span></code></pre></div>
 <p>We will discuss the syntax for <code>replace_na()</code> later in lecture.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>Use <code>mutate()</code> to add a column for the number of singles, which can be computed as <span class="math inline">\(\text{X1B} = \text{H} - \text{X2B} - \text{X3B} - \text{HR}\)</span>.</li>
 </ol>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">hitting_qualified &lt;-<span class="st"> </span><span class="kw">mutate</span>(hitting_qualified, <span class="dt">X1B =</span> H <span class="op">-</span><span class="st"> </span>X2B <span class="op">-</span><span class="st"> </span>X3B <span class="op">-</span><span class="st"> </span>HR)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;</span><span class="st"> </span>hitting_qualified &lt;-<span class="st"> </span><span class="kw">mutate</span>(hitting_qualified, <span class="dt">X1B =</span> H <span class="op">-</span><span class="st"> </span>X2B <span class="op">-</span><span class="st"> </span>X3B <span class="op">-</span><span class="st"> </span>HR)</span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li><p>The variable BB includes as a subset all intentional walks (IBB). Use <code>mutate()</code> to add a column to <code>hitting_qualified</code> that counts the number of <em>un-intentional walks</em> (uBB). Be sure to save the resulting tibble as <code>hitting_qualified</code>.</p></li>
 <li><p>Use <code>mutate()</code> to add columns for the following offensive statistics, whose formulae are given below. We have also included links to pages on <a href="htpps://www.fangraphs.com">Fangraphs</a> that define and discuss each of these statistics.</p></li>
 </ol>
 <ul>
-<li><a href="https://www.fangraphs.com/library/offense/rate-stats/">Walk Percentage</a> (BBP): <span class="math display">\[
+<li><p><a href="https://www.fangraphs.com/library/offense/rate-stats/">Walk Percentage</a> (BBP): <span class="math display">\[
 \text{BBP} = \frac{\text{BB}}{\text{PA}}
-\]</span></li>
+\]</span></p></li>
 <li><p><a href="https://www.fangraphs.com/library/offense/rate-stats/">Strike-out Percentage</a> (KP): <span class="math display">\[\text{KP} = \frac{\text{SO}}{\text{PA}}\]</span></p></li>
-<li><a href="https://www.fangraphs.com/library/offense/obp/">On-Base Percentage</a> (OBP): <span class="math display">\[\text{OBP} = \frac{\text{H} + \text{BB} + \text{HBP}}{\text{AB} + \text{BB} + \text{HBP} + \text{SF}}\]</span></li>
+<li><p><a href="https://www.fangraphs.com/library/offense/obp/">On-Base Percentage</a> (OBP): <span class="math display">\[\text{OBP} = \frac{\text{H} + \text{BB} + \text{HBP}}{\text{AB} + \text{BB} + \text{HBP} + \text{SF}}\]</span></p></li>
 <li><p>Slugging (SLG): <span class="math display">\[
 \text{SLG} = \frac{\text{X1B} + 2 \times \text{X2B} + 3\times \text{X3B} + 4\times \text{HR}}{\text{AB}}
 \]</span></p></li>
-<li><a href="https://www.fangraphs.com/library/offense/ops/">On-Base Plus Slugging</a> (OPS): <span class="math display">\[\text{OPS} = \text{OBP} + \text{SLG}\]</span></li>
+<li><p><a href="https://www.fangraphs.com/library/offense/ops/">On-Base Plus Slugging</a> (OPS): <span class="math display">\[\text{OPS} = \text{OBP} + \text{SLG}\]</span></p></li>
 <li><p><a href="https://www.fangraphs.com/library/offense/woba/">weighted On-Base Average</a> (wOBA): We will use the 2013 weights which can be found <a href="https://www.fangraphs.com/guts.aspx?type=cn">here</a> <span class="math display">\[
 \text{wOBA} = \frac{0.687 \times \text{uBB} + 0.718 \times \text{HBP} + 0.881 \times \text{X1B} + 1.256 \times \text{X2B} + 1.594 \times \text{X3B} + 2.065 \times \text{HR}}{\text{AB} + \text{uBB} + \text{SF} + \text{HBP}}
 \]</span></p></li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">hitting_qualified &lt;-<span class="st"> </span><span class="kw">mutate</span>(hitting_qualified,</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">                  <span class="dt">BBP =</span> BB<span class="op">/</span>PA,</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">                  <span class="dt">KP =</span> SO<span class="op">/</span>PA,</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">                  <span class="dt">OBP =</span> (H <span class="op">+</span><span class="st"> </span>BB <span class="op">+</span><span class="st"> </span>HBP)<span class="op">/</span>(AB <span class="op">+</span><span class="st"> </span>BB <span class="op">+</span><span class="st"> </span>HBP <span class="op">+</span><span class="st"> </span>SF),</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">                  <span class="dt">SLG =</span> (X1B <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>X2B <span class="op">+</span><span class="st"> </span><span class="dv">3</span><span class="op">*</span>X3B <span class="op">+</span><span class="st"> </span><span class="dv">4</span><span class="op">*</span>HR)<span class="op">/</span>AB,</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">                  <span class="dt">OPS =</span> OBP <span class="op">+</span><span class="st"> </span>SLG,</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">                  <span class="dt">wOBA =</span> (<span class="fl">0.687</span> <span class="op">*</span><span class="st"> </span>uBB <span class="op">+</span><span class="st"> </span><span class="fl">0.718</span> <span class="op">*</span><span class="st"> </span>HBP <span class="op">+</span><span class="st"> </span><span class="fl">0.81</span> <span class="op">*</span><span class="st"> </span>X1B <span class="op">+</span><span class="st"> </span><span class="fl">1.256</span> <span class="op">*</span><span class="st"> </span>X2B <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="st">                            </span><span class="fl">1.594</span> <span class="op">*</span><span class="st"> </span>X3B<span class="op">+</span><span class="st"> </span><span class="fl">2.065</span> <span class="op">*</span><span class="st"> </span>HR)<span class="op">/</span>(AB <span class="op">+</span><span class="st"> </span>uBB <span class="op">+</span><span class="st"> </span>SF <span class="op">+</span><span class="st"> </span>HBP))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;</span><span class="st"> </span>hitting_qualified &lt;-<span class="st"> </span><span class="kw">mutate</span>(hitting_qualified,</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">+</span><span class="st">                   </span><span class="dt">BBP =</span> BB<span class="op">/</span>PA,</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">+</span><span class="st">                   </span><span class="dt">KP =</span> SO<span class="op">/</span>PA,</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="op">+</span><span class="st">                   </span><span class="dt">OBP =</span> (H <span class="op">+</span><span class="st"> </span>BB <span class="op">+</span><span class="st"> </span>HBP)<span class="op">/</span>(AB <span class="op">+</span><span class="st"> </span>BB <span class="op">+</span><span class="st"> </span>HBP <span class="op">+</span><span class="st"> </span>SF),</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">+</span><span class="st">                   </span><span class="dt">SLG =</span> (X1B <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>X2B <span class="op">+</span><span class="st"> </span><span class="dv">3</span><span class="op">*</span>X3B <span class="op">+</span><span class="st"> </span><span class="dv">4</span><span class="op">*</span>HR)<span class="op">/</span>AB,</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="op">+</span><span class="st">                   </span><span class="dt">OPS =</span> OBP <span class="op">+</span><span class="st"> </span>SLG,</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="op">+</span><span class="st">                   </span><span class="dt">wOBA =</span> (<span class="fl">0.687</span> <span class="op">*</span><span class="st"> </span>uBB <span class="op">+</span><span class="st"> </span><span class="fl">0.718</span> <span class="op">*</span><span class="st"> </span>HBP <span class="op">+</span><span class="st"> </span><span class="fl">0.81</span> <span class="op">*</span><span class="st"> </span>X1B <span class="op">+</span><span class="st"> </span><span class="fl">1.256</span> <span class="op">*</span><span class="st"> </span>X2B <span class="op">+</span><span class="st"> </span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="op">+</span><span class="st">                             </span><span class="fl">1.594</span> <span class="op">*</span><span class="st"> </span>X3B<span class="op">+</span><span class="st"> </span><span class="fl">2.065</span> <span class="op">*</span><span class="st"> </span>HR)<span class="op">/</span>(AB <span class="op">+</span><span class="st"> </span>uBB <span class="op">+</span><span class="st"> </span>SF <span class="op">+</span><span class="st"> </span>HBP))</span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li><p>For most of the statistics in the previous question, <a href="htpps://www.fangraphs.com">Fangraphs</a> has defined rating scales (to see these ratings, click on the linked page for each statistic in Question 6 and scroll down to the “Context” section of the page). Use <code>mutate()</code> and <code>case_when()</code> to add the ratings for walk percentage (BBP), strike-out percentage (KP), on-base percentage (OBP), on-base plus slugging (OPS), and wOBA. Call the columns “BBP_rating”, “KP_rating”, “OBP_rating”, “OPS_rating”, and “wOBA_rating.”</p></li>
 <li><p>Use <code>filter()</code> to subset the players who played between 2000 and 2015. Call the new tbl <code>tmp_batting</code>.</p></li>
-<li>Use <code>select()</code> to create a tibble called <code>batting_recent</code> containing all players who played between 2000 and 2015 with the following columns: playerID, yearID, teamID, lgID, and all of the statistics and rankings created in Problems 6 and 7.</li>
+<li><p>Use <code>select()</code> to create a tibble called <code>batting_recent</code> containing all players who played between 2000 and 2015 with the following columns: playerID, yearID, teamID, lgID, and all of the statistics and rankings created in Problems 6 and 7.</p></li>
 <li><p>Explore the distribution of some of the batting statistics introduced in problem 6 using the tbl <code>batting_recent</code> using histograms. Then explore the relationship between some of these statistics with scatterplots.</p></li>
 </ol>
 </div>
@@ -685,6 +670,28 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

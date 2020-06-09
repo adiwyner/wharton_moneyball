@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -27,9 +27,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -39,14 +39,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -55,9 +57,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -111,7 +113,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -168,7 +170,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -317,6 +318,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -329,27 +331,10 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 <style type="text/css">
 .code-folding-btn { margin-bottom: 4px; }
 </style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("show" === "show");
-});
-</script>
 
 
 
@@ -372,7 +357,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">WMA19</a>
+      <a class="navbar-brand" href="index.html">WMA2020</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -516,45 +501,45 @@ $(document).ready(function () {
 <h2>MLB Batting Statistics</h2>
 <p>In this problem set, you will practice using the pipe <code>%&gt;%</code> and grouped calculations with batting statistics taken from the Lahman dataset. We will compute the same statistics as we did in <a href="ps3.html">Problem Set 3</a> and also standardize these statistics within year, year and league, and also historical era.</p>
 <p>To load the batting data into R, we can do the following</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(Lahman)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(Batting)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(Lahman)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(Batting)</span></code></pre></div>
 <p>Unfortunately, some statistics like hit-by-pitch (HBP) were not recorded in the earlier decades of baseball. In the tbl, these missing values are designated <code>NA</code>. To see some of these, we can run the following code:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>batting <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(playerID, yearID, teamID, AB, BB, HBP, SH, SF, IBB, GIDP)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># A tibble: 105,861 x 10</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">   playerID  yearID teamID    AB    BB   HBP    SH    SF   IBB  GIDP</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st"> </span><span class="dv">1</span> abercda01   <span class="dv">1871</span> TRO        <span class="dv">4</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"> <span class="dv">2</span> addybo01    <span class="dv">1871</span> RC1      <span class="dv">118</span>     <span class="dv">4</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"> <span class="dv">3</span> allisar01   <span class="dv">1871</span> CL1      <span class="dv">137</span>     <span class="dv">2</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"> <span class="dv">4</span> allisdo01   <span class="dv">1871</span> WS3      <span class="dv">133</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"> <span class="dv">5</span> ansonca01   <span class="dv">1871</span> RC1      <span class="dv">120</span>     <span class="dv">2</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"> <span class="dv">6</span> armstbo01   <span class="dv">1871</span> FW1       <span class="dv">49</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"> <span class="dv">7</span> barkeal01   <span class="dv">1871</span> RC1        <span class="dv">4</span>     <span class="dv">1</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"> <span class="dv">8</span> barnero01   <span class="dv">1871</span> BS1      <span class="dv">157</span>    <span class="dv">13</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"> <span class="dv">9</span> barrebi01   <span class="dv">1871</span> FW1        <span class="dv">5</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="dv">10</span> barrofr01   <span class="dv">1871</span> BS1       <span class="dv">86</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co"># … with 105,851 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span>batting <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(playerID, yearID, teamID, AB, BB, HBP, SH, SF, IBB, GIDP)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co"># A tibble: 107,429 x 10</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>   playerID  yearID teamID    AB    BB   HBP    SH    SF   IBB  GIDP</span>
+<span id="cb2-5"><a href="#cb2-5"></a>   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="st"> </span><span class="dv">1</span> abercda01   <span class="dv">1871</span> TRO        <span class="dv">4</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a> <span class="dv">2</span> addybo01    <span class="dv">1871</span> RC1      <span class="dv">118</span>     <span class="dv">4</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a> <span class="dv">3</span> allisar01   <span class="dv">1871</span> CL1      <span class="dv">137</span>     <span class="dv">2</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">1</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a> <span class="dv">4</span> allisdo01   <span class="dv">1871</span> WS3      <span class="dv">133</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a> <span class="dv">5</span> ansonca01   <span class="dv">1871</span> RC1      <span class="dv">120</span>     <span class="dv">2</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a> <span class="dv">6</span> armstbo01   <span class="dv">1871</span> FW1       <span class="dv">49</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a> <span class="dv">7</span> barkeal01   <span class="dv">1871</span> RC1        <span class="dv">4</span>     <span class="dv">1</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a> <span class="dv">8</span> barnero01   <span class="dv">1871</span> BS1      <span class="dv">157</span>    <span class="dv">13</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">1</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a> <span class="dv">9</span> barrebi01   <span class="dv">1871</span> FW1        <span class="dv">5</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="dv">10</span> barrofr01   <span class="dv">1871</span> BS1       <span class="dv">86</span>     <span class="dv">0</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>    <span class="ot">NA</span>     <span class="dv">0</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co"># … with 107,419 more rows</span></span></code></pre></div>
 <p>A common convention for dealing with the missing values when computing <span class="math inline">\(\text{PA}\)</span> is to replace the <code>NA</code> with a <code>0</code>. To do this, we can use the function <code>replace_na()</code> within a pipe as follows.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">replace_na</span>(<span class="kw">list</span>(<span class="dt">IBB =</span> <span class="dv">0</span>, <span class="dt">HBP =</span> <span class="dv">0</span>, <span class="dt">SH =</span> <span class="dv">0</span>, <span class="dt">SF =</span> <span class="dv">0</span>, <span class="dt">GIDP =</span> <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="op">&gt;</span><span class="st"> </span>batting <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(playerID, yearID, teamID, AB, BB, HBP, SH, SF, IBB)</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co"># A tibble: 105,861 x 9</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">   playerID  yearID teamID    AB    BB   HBP    SH    SF   IBB</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="st"> </span><span class="dv">1</span> abercda01   <span class="dv">1871</span> TRO        <span class="dv">4</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"> <span class="dv">2</span> addybo01    <span class="dv">1871</span> RC1      <span class="dv">118</span>     <span class="dv">4</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"> <span class="dv">3</span> allisar01   <span class="dv">1871</span> CL1      <span class="dv">137</span>     <span class="dv">2</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"> <span class="dv">4</span> allisdo01   <span class="dv">1871</span> WS3      <span class="dv">133</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"> <span class="dv">5</span> ansonca01   <span class="dv">1871</span> RC1      <span class="dv">120</span>     <span class="dv">2</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"> <span class="dv">6</span> armstbo01   <span class="dv">1871</span> FW1       <span class="dv">49</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"> <span class="dv">7</span> barkeal01   <span class="dv">1871</span> RC1        <span class="dv">4</span>     <span class="dv">1</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"> <span class="dv">8</span> barnero01   <span class="dv">1871</span> BS1      <span class="dv">157</span>    <span class="dv">13</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"> <span class="dv">9</span> barrebi01   <span class="dv">1871</span> FW1        <span class="dv">5</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="dv">10</span> barrofr01   <span class="dv">1871</span> BS1       <span class="dv">86</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co"># … with 105,851 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">replace_na</span>(<span class="kw">list</span>(<span class="dt">IBB =</span> <span class="dv">0</span>, <span class="dt">HBP =</span> <span class="dv">0</span>, <span class="dt">SH =</span> <span class="dv">0</span>, <span class="dt">SF =</span> <span class="dv">0</span>, <span class="dt">GIDP =</span> <span class="dv">0</span>))</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">&gt;</span><span class="st"> </span>batting <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(playerID, yearID, teamID, AB, BB, HBP, SH, SF, IBB)</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># A tibble: 107,429 x 9</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>   playerID  yearID teamID    AB    BB   HBP    SH    SF   IBB</span>
+<span id="cb3-7"><a href="#cb3-7"></a>   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>int<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="st"> </span><span class="dv">1</span> abercda01   <span class="dv">1871</span> TRO        <span class="dv">4</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a> <span class="dv">2</span> addybo01    <span class="dv">1871</span> RC1      <span class="dv">118</span>     <span class="dv">4</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a> <span class="dv">3</span> allisar01   <span class="dv">1871</span> CL1      <span class="dv">137</span>     <span class="dv">2</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a> <span class="dv">4</span> allisdo01   <span class="dv">1871</span> WS3      <span class="dv">133</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a> <span class="dv">5</span> ansonca01   <span class="dv">1871</span> RC1      <span class="dv">120</span>     <span class="dv">2</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a> <span class="dv">6</span> armstbo01   <span class="dv">1871</span> FW1       <span class="dv">49</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a> <span class="dv">7</span> barkeal01   <span class="dv">1871</span> RC1        <span class="dv">4</span>     <span class="dv">1</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a> <span class="dv">8</span> barnero01   <span class="dv">1871</span> BS1      <span class="dv">157</span>    <span class="dv">13</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a> <span class="dv">9</span> barrebi01   <span class="dv">1871</span> FW1        <span class="dv">5</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="dv">10</span> barrofr01   <span class="dv">1871</span> BS1       <span class="dv">86</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co"># … with 107,419 more rows</span></span></code></pre></div>
 <p>The syntax for <code>replace_na()</code> is a bit involved but the basic idea is you have to specify the value you want to replace each <code>NA</code>. When using <code>replace_na()</code> it is very important to remember to include the <code>list(...)</code> bit.</p>
 <ol style="list-style-type: decimal">
 <li><p>Load the Lahman data and run the above code to create the tbl <code>Batting</code>, which has replaced all of the <code>NA</code>’ in the columns <code>IBB, HBP, SH, SF</code> and GIDP`.</p></li>
@@ -568,34 +553,34 @@ $(document).ready(function () {
 <ol start="3" style="list-style-type: decimal">
 <li>Standardize each of BA, OBP, OPS, and wOBA using data from all of the years. Who were the best and worst batters according to these four metrics? Name the columns containing these new standardizedvalues <code>zBA_all</code>, <code>zOPB_all</code>, etc. <em>Remember, you must re-define the <code>standardize()</code> function we wrote in <a href="module4.html">Module 4</a></em></li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>standardize &lt;-<span class="st"> </span><span class="cf">function</span>(x){ (x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x))<span class="op">/</span><span class="kw">sd</span>(x)}</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="op">&gt;</span><span class="st"> </span>batting &lt;-</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_all =</span> <span class="kw">standardize</span>(BA),</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_all =</span> <span class="kw">standardize</span>(OBP),</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_all =</span> <span class="kw">standardize</span>(OPS),</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_all =</span> <span class="kw">standardize</span>(wOBA))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;</span><span class="st"> </span>standardize &lt;-<span class="st"> </span><span class="cf">function</span>(x){ (x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x))<span class="op">/</span><span class="kw">sd</span>(x)}</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;</span><span class="st"> </span>batting &lt;-</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_all =</span> <span class="kw">standardize</span>(BA),</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_all =</span> <span class="kw">standardize</span>(OBP),</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_all =</span> <span class="kw">standardize</span>(OPS),</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_all =</span> <span class="kw">standardize</span>(wOBA))</span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Group <code>batting</code> by year and compute the standardized BA, OBP, OPS, and wOBA within each year. Now who are the best and worst batters according to the four measures? Name the columns containing these new standardized values <code>zBA_year</code>, <code>zOBP_year</code>, etc.</li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(yearID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_year =</span> <span class="kw">standardize</span>(BA),</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_year =</span> <span class="kw">standardize</span>(OBP),</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_year =</span> <span class="kw">standardize</span>(OPS),</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_year =</span> <span class="kw">standardize</span>(wOBA))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(yearID) <span class="op">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_year =</span> <span class="kw">standardize</span>(BA),</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_year =</span> <span class="kw">standardize</span>(OBP),</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_year =</span> <span class="kw">standardize</span>(OPS),</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_year =</span> <span class="kw">standardize</span>(wOBA))</span></code></pre></div>
 <ol start="5" style="list-style-type: decimal">
 <li>Remove the grouping by year and instead group by year and league. Once again, standardize OBP, OPS, and wOBA within each league-year combination. Are the best and worst batters still the same? Name the columns containing these new standardized valuse <code>zBA_year_lg</code>, <code>zOBP_year_lg</code>, etc.</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(yearID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_year_lg =</span> <span class="kw">standardize</span>(BA),</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_year_lg =</span> <span class="kw">standardize</span>(OBP),</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_year_lg =</span> <span class="kw">standardize</span>(OPS),</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_year_lg =</span> <span class="kw">standardize</span>(wOBA))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;</span><span class="st"> </span>batting &lt;-<span class="st"> </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(yearID) <span class="op">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_year_lg =</span> <span class="kw">standardize</span>(BA),</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_year_lg =</span> <span class="kw">standardize</span>(OBP),</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_year_lg =</span> <span class="kw">standardize</span>(OPS),</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_year_lg =</span> <span class="kw">standardize</span>(wOBA))</span></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
 <li>Remove the grouping you created in Problem 4. Bill James <a href="https://www.billjamesonline.com/dividing_baseball_history_into_eras/">divided baseball history into several eras</a> as follows:</li>
 </ol>
@@ -607,21 +592,21 @@ $(document).ready(function () {
 <li>Artifical Turf Era: 1969 – 1992</li>
 <li>Camden Yards Era: 1993 – present</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>batting &lt;-</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">HIST_ERA =</span> <span class="kw">case_when</span>(</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="op">+</span><span class="st">     </span><span class="dv">1871</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1892</span> <span class="op">~</span><span class="st"> &quot;Pioneer&quot;</span>,</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="op">+</span><span class="st">     </span><span class="dv">1893</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1919</span> <span class="op">~</span><span class="st"> &quot;Spitball&quot;</span>,</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="op">+</span><span class="st">     </span><span class="dv">1920</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1946</span> <span class="op">~</span><span class="st"> &quot;Landis&quot;</span>,</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="op">+</span><span class="st">     </span><span class="dv">1947</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1968</span> <span class="op">~</span><span class="st"> &quot;Baby Boomer&quot;</span>,</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="op">+</span><span class="st">     </span><span class="dv">1969</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1992</span> <span class="op">~</span><span class="st"> &quot;Artifical Turf&quot;</span>,</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="op">+</span><span class="st">     </span><span class="dv">1993</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">~</span><span class="st"> &quot;Camden Yards&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(HIST_ERA) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_hist =</span> <span class="kw">standardize</span>(BA),</a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_hist =</span> <span class="kw">standardize</span>(OBP),</a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_hist =</span> <span class="kw">standardize</span>(OPS),</a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_hist =</span> <span class="kw">standardize</span>(wOBA))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;</span><span class="st"> </span>batting &lt;-</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">HIST_ERA =</span> <span class="kw">case_when</span>(</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="op">+</span><span class="st">     </span><span class="dv">1871</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1892</span> <span class="op">~</span><span class="st"> &quot;Pioneer&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="op">+</span><span class="st">     </span><span class="dv">1893</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1919</span> <span class="op">~</span><span class="st"> &quot;Spitball&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="op">+</span><span class="st">     </span><span class="dv">1920</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1946</span> <span class="op">~</span><span class="st"> &quot;Landis&quot;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="op">+</span><span class="st">     </span><span class="dv">1947</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1968</span> <span class="op">~</span><span class="st"> &quot;Baby Boomer&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="op">+</span><span class="st">     </span><span class="dv">1969</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">&amp;</span><span class="st"> </span>yearID <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1992</span> <span class="op">~</span><span class="st"> &quot;Artifical Turf&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="op">+</span><span class="st">     </span><span class="dv">1993</span> <span class="op">&lt;=</span><span class="st"> </span>yearID <span class="op">~</span><span class="st"> &quot;Camden Yards&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(HIST_ERA) <span class="op">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="op">+</span><span class="st">   </span><span class="kw">mutate</span>(<span class="dt">zBA_hist =</span> <span class="kw">standardize</span>(BA),</span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOBP_hist =</span> <span class="kw">standardize</span>(OBP),</span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="op">+</span><span class="st">          </span><span class="dt">zOPS_hist =</span> <span class="kw">standardize</span>(OPS),</span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="op">+</span><span class="st">          </span><span class="dt">zwOBA_hist =</span> <span class="kw">standardize</span>(wOBA))</span></code></pre></div>
 <p>Use <code>mutate()</code> and <code>case_when()</code> (just like we did in <a href="module3.html">Module 3</a>) to add a column called Hist_era to <code>batting</code> that records the historical era.</p>
 <ol start="7" style="list-style-type: decimal">
 <li><p>Group <code>batting</code> by Hist_era and standardize BA, OBP, OPS, and wOBA within historical era. Who are the best and worst batters now? Name the columns containing these new stanardized values <code>zBA_hist</code>, <code>zOBP_hist</code>, etc.</p></li>
@@ -638,16 +623,16 @@ We will replicate his analysis in the following problems.
 <ol style="list-style-type: decimal">
 <li>Remember the function we wrote in <a href="module4.html">Module 4</a> to standardize various statistics? It is reproduced below</li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>standardize &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>mu &lt;-<span class="st"> </span><span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="op">+</span><span class="st">   </span>sigma &lt;-<span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">return</span>( (x <span class="op">-</span><span class="st"> </span>mu)<span class="op">/</span>sigma)</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="op">+</span><span class="st"> </span>}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;</span><span class="st"> </span>standardize &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">+</span><span class="st">   </span>mu &lt;-<span class="st"> </span><span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">+</span><span class="st">   </span>sigma &lt;-<span class="st"> </span><span class="kw">sd</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">return</span>( (x <span class="op">-</span><span class="st"> </span>mu)<span class="op">/</span>sigma)</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">+</span><span class="st"> </span>}</span></code></pre></div>
 <p>We need to write another function in order to compute “relative payroll”. This function will take in a vector <code>x</code>, compute its median, and then divides every element of <code>x</code> by the median.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>relative &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>med &lt;-<span class="st"> </span><span class="kw">median</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">return</span>( x<span class="op">/</span>med )  </a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="op">+</span><span class="st"> </span>}</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;</span><span class="st"> </span>relative &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">+</span><span class="st">   </span>med &lt;-<span class="st"> </span><span class="kw">median</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">return</span>( x<span class="op">/</span>med )  </span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="op">+</span><span class="st"> </span>}</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Read in the <a href="data/mlb_payrolls.csv">MLB Payroll Data</a> and load it into a tibble called <code>mlb_payrolls</code>.</li>
 </ol>
@@ -666,7 +651,8 @@ cols(
 <li><p>Make a scatterplot that shows how team payrolls have evolved over the year. Similar to what we did in <a href="module4.html">Module 4</a>, add a line to this scatterplot that shows the average team payroll. Do the same thing for relative payroll. What do you notice about the average team payroll and relative payroll?</p></li>
 <li><p>As you will see in coming lectures, correlation is a measure of the strength of the <em>linear</em> relationship between two variables. The closer to +1 or -1 the correlation between two variables is, the more predictable they are of each other. We can compute it using the <code>cor()</code> function. Using <code>summary()</code> and <code>cor()</code>, compute the correlation between relative payroll and winning percentage within each year. What do you notice about how the relationship between winning percentage and relative payroll changes year to year?</p></li>
 </ol>
-<pre><code># A tibble: 18 x 2
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)
+# A tibble: 18 x 2
     Year   cor
    &lt;dbl&gt; &lt;dbl&gt;
  1  1998 0.764
@@ -691,13 +677,13 @@ cols(
 <div id="a-challenge-question" class="section level2">
 <h2>A Challenge Question</h2>
 <p>Without running the code, work with your teammates to see if you can figure out what the code below is doing.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span>batting_<span class="dv">2014</span>_<span class="dv">2015</span> &lt;-</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(yearID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2014</span>, <span class="dv">2015</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(playerID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="kw">n</span>() <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(playerID, yearID, BA) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="op">+</span><span class="st">   </span><span class="kw">arrange</span>(playerID)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">&gt;</span><span class="st"> </span>batting_<span class="dv">2014</span>_<span class="dv">2015</span> &lt;-</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="op">+</span><span class="st">   </span>batting <span class="op">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(yearID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2014</span>, <span class="dv">2015</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="op">+</span><span class="st">   </span><span class="kw">group_by</span>(playerID) <span class="op">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="op">+</span><span class="st">   </span><span class="kw">filter</span>(<span class="kw">n</span>() <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="op">+</span><span class="st">   </span><span class="kw">select</span>(playerID, yearID, BA) <span class="op">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="op">+</span><span class="st">   </span><span class="kw">arrange</span>(playerID)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Run the code above and save the tbl <code>batting_2014_2015.RData</code> to the file “data/batting_2014_2015.RData”. We will return to this dataset in <a href="lecture4.html">Lecture 4</a>. <!-- We probably need to melt data here --></li>
 </ol>
@@ -720,6 +706,28 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
