@@ -32,7 +32,7 @@ We've come up with [a really short assignment](ps0.html) for you to work on befo
 [Problem Set 0](ps0.html) contains instructions for downloading and installing R and RStudio, which you should do prior to arrival.
 It also contains a very brief introduction to the R programming language with some simple exercises, and several questions that will motivate the concepts you'll be exploring in Prof. Wyner's class. 
 Don't worry if you don't finish working your way through these exercises before you arrive.
-On the first morning  (Monday, July 6 for Academy or 20 for Training Camp), you'll meet with your project team and RTA to discuss them. 
+On the first morning  (Monday, July 6 for Academy or Monday, July 20 for Training Camp), you'll meet with your project team and RTA to discuss them. 
 As we approach the start of camp, please check back for periodic updates to the site. 
 
 
